@@ -1,0 +1,27 @@
+import os
+from dotenv import load_dotenv
+from langchain_openai import ChatOpenAI
+from langchain.agents import initialize_agent, AgentType
+from composio_langchain import ComposioToolSet
+
+load_dotenv()
+
+def create_mediflow_agent():
+
+    llm = ChatOpenAI(
+        model="gpt-4o",
+        temperature=0
+    )
+
+    # Load Composio tools dynamically
+    composio_toolset = ComposioToolSet()
+    tools = composio_toolset.get_tools()
+
+    agent = initialize_agent(
+        tools=tools,
+        llm=llm,
+        agent=AgentType.OPENAI_FUNCTIONS,
+        verbose=True
+    )
+
+    return agent
